@@ -1,0 +1,43 @@
+# Blueprint Render — "New +" depuis un dépôt GitHub : ces réglages sont
+# appliqués automatiquement. Les secrets (clés KKiaPay, Anthropic, Telegram)
+# sont marqués sync: false : on les saisit dans le tableau de bord Render
+# (Environment), jamais dans ce fichier.
+services:
+  - type: web
+    name: bourses-afrique
+    runtime: python
+    plan: starter # ~7 $/mois : toujours actif, disque persistant
+    buildCommand: pip install -r requirements.txt
+    # Un seul worker : le scheduler du scraper (SCRAPER_INTERVAL_HOURS) ne
+    # doit tourner qu'une fois, et SQLite préfère un seul processus.
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 app:app
+    healthCheckPath: /connexion # page publique, répond 200 sans session
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: SESSION_COOKIE_SECURE
+        value: "true" # site servi en HTTPS par Render
+      - key: KKIAPAY_SANDBOX
+        value: "false" # paiements live
+      - key: KKIAPAY_PUBLIC_KEY
+        sync: false # à saisir dans le tableau de bord Render (onglet Live KKiaPay)
+      - key: KKIAPAY_PRIVATE_KEY
+        sync: false
+      - key: KKIAPAY_SECRET
+        sync: false
+      - key: FLASK_SECRET_KEY
+        generateValue: true # clé de session générée et conservée par Render
+      - key: BOURSES_DB_PATH
+        value: /data/bourses.db # sur le disque persistant
+      - key: SCRAPER_INTERVAL_HOURS
+        value: "6"
+      - key: ANTHROPIC_API_KEY
+        sync: false # extraction IA du scraper
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false # optionnel — alertes nouvelles bourses
+      - key: TELEGRAM_CHAT_ID
+        sync: false # optionnel
+    disk:
+      name: bourses-data
+      mountPath: /data
+      sizeGB: 1 # comptes, abonnements, bourses — quelques Mo suffisent

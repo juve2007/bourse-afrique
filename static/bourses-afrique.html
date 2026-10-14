@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bourses Afrique — Bourses d'études vérifiées</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0F1B2D;
+    --navy-2:#16233A;
+    --navy-3:#1D2C46;
+    --paper:#F5F1E7;
+    --paper-2:#EBE4D2;
+    --gold:#C89B3C;
+    --gold-ink:#7A5A18;
+    --gold-soft:rgba(200,155,60,0.14);
+    --teal:#3F7D68;
+    --teal-ink:#204B3D;
+    --orange:#D9822B;
+    --orange-ink:#8A4E12;
+    --rust:#B54B36;
+    --rust-ink:#6E2D1F;
+    --slate:#8B93A1;
+    --ink:#1C2333;
+    --paper-text:#463F30;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--navy);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;margin:0;padding:0;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(1.6rem,3vw,2.1rem);margin:0 0 6px;}
+  .section-sub{color:var(--slate);font-size:14.5px;margin:0 0 32px;}
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- BUTTONS ---------- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;border-radius:7px;font-size:14px;font-weight:600;border:1px solid transparent;cursor:pointer;transition:transform .15s ease, background .15s ease, box-shadow .15s ease;font-family:'Inter',sans-serif;}
+  .btn:hover{transform:translateY(-1.5px);}
+  .btn-solid{background:var(--gold);color:var(--navy);}
+  .btn-solid:hover{background:#DCB05C;box-shadow:0 6px 18px rgba(200,155,60,0.3);}
+  .btn-ghost{background:transparent;border-color:rgba(200,155,60,0.5);color:var(--paper);}
+  .btn-ghost:hover{background:rgba(200,155,60,0.12);}
+
+  /* ---------- NAV ---------- */
+  .site-nav{position:sticky;top:0;z-index:20;background:rgba(15,27,45,0.7);backdrop-filter:blur(10px);border-bottom:1px solid rgba(200,155,60,0.15);transition:background .25s ease, border-color .25s ease;}
+  .site-nav.scrolled{background:rgba(15,27,45,0.96);border-color:rgba(200,155,60,0.3);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:20px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:18px;font-weight:600;flex:none;}
+  .brand-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--orange));display:flex;align-items:center;justify-content:center;color:var(--navy);flex:none;}
+  .brand-icon svg{width:19px;height:19px;}
+  .brand-word strong{color:var(--gold);font-weight:600;}
+  .nav-links{display:flex;gap:28px;font-size:14px;color:#C7CCD8;}
+  .nav-links a:hover{color:var(--paper);}
+  .nav-actions{display:flex;gap:10px;flex:none;}
+  @media(max-width:760px){.nav-links{display:none;}}
+  @media(max-width:520px){.btn-ghost{display:none;}}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;overflow:hidden;padding:64px 0 84px;border-bottom:1px solid rgba(200,155,60,0.18);}
+  .hero-pattern{position:absolute;inset:0;opacity:.35;pointer-events:none;}
+  .hero-pattern svg{width:100%;height:100%;}
+  .hero-inner{position:relative;display:grid;grid-template-columns:1.15fr 0.85fr;gap:48px;align-items:center;}
+  @media(max-width:860px){.hero-inner{grid-template-columns:1fr;}}
+  .kicker{font-size:13.5px;letter-spacing:.02em;color:var(--gold);margin:0 0 16px;font-weight:600;}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.9rem,4.4vw,2.9rem);line-height:1.12;margin:0 0 18px;}
+  h1 em{font-style:normal;color:var(--gold);}
+  .hero p.lead{font-size:16px;line-height:1.65;color:#C7CCD8;max-width:52ch;margin:0 0 30px;}
+
+  .hero-search{display:flex;gap:8px;background:var(--navy-2);border:1px solid rgba(200,155,60,0.3);padding:6px;border-radius:9px;max-width:520px;margin-bottom:34px;}
+  .hero-search input{flex:1;background:transparent;border:none;color:var(--paper);padding:10px 12px;font-size:14px;font-family:'Inter',sans-serif;}
+  .hero-search input::placeholder{color:var(--slate);}
+  .hero-search input:focus{outline:none;}
+  .hero-search button{background:var(--teal);color:#fff;border:none;padding:0 20px;border-radius:6px;font-weight:600;font-size:13.5px;cursor:pointer;transition:background .15s ease;}
+  .hero-search button:hover{background:#4C9A82;}
+
+  .hero-stats{display:flex;gap:36px;flex-wrap:wrap;}
+  .stat b{display:block;font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--paper);}
+  .stat span{font-size:12.5px;color:var(--slate);}
+
+  .hero-visual{position:relative;height:340px;}
+  .blob{position:absolute;border-radius:50%;filter:blur(40px);opacity:.5;}
+  .blob-1{width:220px;height:220px;background:var(--teal);top:10px;right:40px;}
+  .blob-2{width:180px;height:180px;background:var(--gold);bottom:0;left:10px;}
+  .hero-visual-core{position:absolute;inset:30px;border:1px solid rgba(200,155,60,0.3);border-radius:20px;background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;}
+  .hero-visual-core svg{width:88px;height:88px;color:var(--gold);opacity:.9;}
+  .float-chip{position:absolute;background:var(--paper);color:var(--paper-text);border-radius:10px;padding:10px 14px;font-size:12.5px;box-shadow:0 12px 30px rgba(0,0,0,0.25);animation:bob 5s ease-in-out infinite;}
+  .float-chip b{display:block;font-family:'Fraunces',serif;font-size:16px;color:var(--ink);}
+  .chip-1{top:6px;left:-6px;animation-delay:0s;}
+  .chip-2{bottom:20px;right:-10px;animation-delay:1.4s;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  @media(max-width:860px){.hero-visual{height:220px;margin-top:8px;}}
+
+  /* ---------- FEATURED ---------- */
+  .featured{padding:64px 0 20px;}
+  .featured-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media(max-width:800px){.featured-grid{grid-template-columns:1fr;}}
+  .f-card{background:var(--navy-2);border:1px solid rgba(200,155,60,0.16);border-radius:12px;padding:22px;transition:transform .2s ease, border-color .2s ease;}
+  .f-card:hover{transform:translateY(-4px);border-color:rgba(200,155,60,0.4);}
+  .f-badge{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+  .f-badge svg{width:24px;height:24px;color:#fff;}
+  .f-card h3{font-family:'Fraunces',serif;font-weight:500;font-size:17px;margin:0 0 6px;line-height:1.3;}
+  .f-meta{font-size:12.5px;color:var(--slate);margin:0 0 14px;}
+  .f-deadline{font-size:13px;color:#E8D9B0;margin:0 0 18px;}
+  .f-deadline b{color:var(--paper);}
+  .f-cta{display:block;text-align:center;padding:10px;border-radius:7px;font-size:13.5px;font-weight:600;color:#fff;}
+
+  /* ---------- DESTINATIONS ---------- */
+  .destinations{padding:64px 0;}
+  .dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;}
+  .d-card{position:relative;border-radius:12px;padding:20px 16px;overflow:hidden;transition:transform .2s ease;cursor:default;}
+  .d-card:hover{transform:translateY(-3px) scale(1.015);}
+  .d-flag{font-size:30px;margin-bottom:10px;display:block;}
+  .d-name{font-weight:600;font-size:14.5px;color:var(--paper);}
+  .d-count{font-size:12px;color:var(--slate);margin-top:2px;}
+
+  /* ---------- FILTERS + DOSSIERS (liste complète) ---------- */
+  .all-heading{padding:8px 0 0;}
+  nav.filters{position:sticky;top:63px;background:var(--navy);z-index:10;padding:18px 0;border-top:1px solid rgba(200,155,60,0.18);border-bottom:1px solid rgba(200,155,60,0.25);margin-top:24px;}
+  .filters-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  #search{flex:1;min-width:180px;background:var(--navy-2);border:1px solid rgba(200,155,60,0.3);color:var(--paper);padding:10px 14px;border-radius:6px;font-family:'Inter',sans-serif;font-size:14px;}
+  #search::placeholder{color:var(--slate);}
+  #search:focus{outline:2px solid var(--gold);outline-offset:1px;}
+  select.chip{background:var(--navy-2);border:1px solid rgba(200,155,60,0.3);color:var(--paper);padding:10px 12px;border-radius:6px;font-family:'Inter',sans-serif;font-size:14px;}
+  select.chip:focus{outline:2px solid var(--gold);outline-offset:1px;}
+
+  main.dossiers{padding:28px 0 80px;}
+  .empty{color:var(--slate);padding:40px 0;text-align:center;}
+  .dossier{background:var(--paper);color:var(--paper-text);border-radius:10px;margin-bottom:14px;overflow:hidden;border:1px solid var(--paper-2);}
+  .dossier-head{display:flex;align-items:center;gap:18px;padding:18px 20px;width:100%;background:none;border:none;text-align:left;cursor:pointer;font:inherit;color:inherit;}
+  .dossier-head:focus-visible{outline:2px solid var(--gold-ink);outline-offset:-2px;}
+  .seal{flex:none;width:58px;height:58px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Fraunces',serif;border:1.5px solid currentColor;line-height:1.05;}
+  .seal b{font-size:17px;font-weight:600;}
+  .seal small{font-size:9px;font-weight:500;letter-spacing:.02em;}
+  .seal.st-urgent{color:var(--rust-ink);background:rgba(181,75,54,0.08);}
+  .seal.st-ouvert{color:var(--teal-ink);background:rgba(63,125,104,0.08);}
+  .seal.st-bientot{color:var(--gold-ink);background:rgba(200,155,60,0.1);}
+  .seal.st-cloture{color:var(--slate);background:rgba(139,147,161,0.1);}
+
+  .dossier-main{flex:1;min-width:0;}
+  .dossier-title-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .dossier-main h3{font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:0;}
+  .stamp{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:var(--teal-ink);border:1px solid var(--teal);border-radius:20px;padding:2px 8px 2px 6px;transform:rotate(-2deg);white-space:nowrap;}
+  .provider{font-size:13.5px;color:#6B6250;margin:3px 0 10px;}
+  .badges{display:flex;gap:8px;flex-wrap:wrap;}
+  .badge{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--paper-2);color:var(--paper-text);}
+  .chevron{flex:none;width:22px;height:22px;color:#8A8065;transition:transform .25s ease;}
+  .dossier.open .chevron{transform:rotate(180deg);}
+
+  .dossier-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .dossier.open .dossier-body{border-top:1px solid var(--paper-2);}
+  .dossier-body-inner{padding:20px 20px 24px;}
+
+  .summary{font-size:14.5px;line-height:1.6;margin:0 0 20px;color:var(--paper-text);}
+  .deadline-note{font-size:13.5px;margin:0 0 20px;padding:10px 14px;border-left:2px solid var(--gold);background:rgba(200,155,60,0.08);color:#5B4A22;}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:22px;}
+  @media(max-width:640px){.cols{grid-template-columns:1fr;}}
+  .col h4{font-size:12.5px;font-weight:600;color:#8A8065;margin:0 0 10px;}
+  .col ul{padding-left:18px;}
+  .col li{font-size:13.5px;line-height:1.55;margin-bottom:6px;list-style:disc;}
+
+  .steps{margin:0 0 22px;counter-reset:step;}
+  .steps li{counter-increment:step;display:flex;gap:12px;font-size:13.5px;line-height:1.55;margin-bottom:10px;}
+  .steps li::before{content:counter(step);flex:none;width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:11px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:600;}
+
+  .official-link{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:6px;font-size:13.5px;font-weight:500;}
+  .official-link:hover{background:var(--navy-2);}
+
+  .locked-panel{border:1px dashed var(--gold-ink);background:rgba(200,155,60,0.07);border-radius:10px;padding:22px;text-align:center;}
+  .locked-panel svg{width:26px;height:26px;color:var(--gold-ink);margin-bottom:10px;}
+  .locked-panel p{font-size:13.5px;color:var(--paper-text);margin:0 0 16px;line-height:1.55;}
+  .locked-panel .unlock-btn{background:var(--gold);color:var(--navy);border:none;padding:11px 22px;border-radius:7px;font-weight:600;font-size:13.5px;cursor:pointer;font-family:'Inter',sans-serif;}
+  .locked-panel .unlock-btn:hover{background:#DCB05C;}
+  .locked-panel .unlock-btn:disabled{opacity:.6;cursor:wait;}
+  .locked-panel .price{display:block;font-size:11.5px;color:#8A8065;margin-top:10px;}
+  .unlocked-flag{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--teal-ink);background:rgba(63,125,104,0.12);border:1px solid var(--teal);border-radius:20px;padding:4px 10px;}
+
+  #mode-banner{display:none;font-size:13px;color:#E8D9B0;background:rgba(200,155,60,0.12);border:1px solid rgba(200,155,60,0.35);border-radius:6px;padding:10px 14px;margin-bottom:28px;}
+
+  /* ---------- COMPTE + ABONNEMENT ---------- */
+  .sub-flag{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#E8D9B0;background:rgba(200,155,60,0.16);border:1px solid var(--gold);border-radius:20px;padding:4px 10px;white-space:nowrap;}
+  .account-chip{font-size:12.5px;color:#C7CCD8;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #logout-form{display:inline;}
+  .sub-panel{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:linear-gradient(120deg, rgba(200,155,60,0.16), rgba(217,130,43,0.10));border:1px solid rgba(200,155,60,0.45);border-radius:12px;padding:18px 22px;margin-bottom:26px;}
+  .sub-panel.active{background:rgba(63,125,104,0.12);border-color:rgba(63,125,104,0.5);}
+  .sub-panel h3{font-family:'Fraunces',serif;font-weight:500;font-size:17px;margin:0 0 4px;color:var(--paper);}
+  .sub-panel p{font-size:13px;color:#C7CCD8;margin:0;line-height:1.55;}
+  .sub-panel .btn-sub{flex:none;background:var(--gold);color:var(--navy);border:none;padding:11px 20px;border-radius:7px;font-weight:600;font-size:13.5px;cursor:pointer;font-family:'Inter',sans-serif;}
+  .sub-panel .btn-sub:hover{background:#DCB05C;}
+  .sub-panel .btn-sub:disabled{opacity:.6;cursor:wait;}
+  .locked-actions{display:flex;flex-direction:column;gap:8px;align-items:center;}
+  .locked-panel .unlock-btn.secondary{background:transparent;border:1px solid var(--gold-ink);color:var(--gold-ink);}
+  .locked-panel .unlock-btn.secondary:hover{background:rgba(200,155,60,0.12);}
+
+  /* ---------- FOOTER ---------- */
+  .site-footer{border-top:1px solid rgba(200,155,60,0.2);padding:44px 0 34px;}
+  .footer-inner{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+  .footer-brand p{font-size:13px;color:var(--slate);max-width:32ch;margin:10px 0 0;line-height:1.6;}
+  .footer-col h4{font-size:12.5px;color:var(--gold);margin:0 0 12px;font-weight:600;}
+  .footer-col li{margin-bottom:8px;}
+  .footer-col a{font-size:13.5px;color:#C7CCD8;}
+  .footer-col a:hover{color:var(--paper);}
+  .footer-bottom{margin-top:36px;padding-top:20px;border-top:1px solid rgba(200,155,60,0.12);font-size:12px;color:var(--slate);}
+</style>
+</head>
+<body>
+
+<header class="site-nav" id="site-nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg>
+      </span>
+      <span class="brand-word">Bourses<strong>Afrique</strong></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#offres">Bourses</a>
+      <a href="#destinations">Destinations</a>
+      <a href="#apropos">À propos</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="sub-flag" id="sub-flag" style="display:none;">★ Abonné</span>
+      <span class="unlocked-flag" id="unlocked-flag" style="display:none;">✓ Débloqué</span>
+      <span class="account-chip" id="account-chip" style="display:none;"></span>
+      <form method="post" action="/deconnexion" id="logout-form"><button type="submit" class="btn btn-ghost" id="logout-btn" style="display:none;">Se déconnecter</button></form>
+      <a href="#dossiers" class="btn btn-solid">Voir les bourses</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-pattern" aria-hidden="true">
+    <svg viewBox="0 0 1080 500" preserveAspectRatio="xMidYMid slice">
+      <g fill="none" stroke="#C89B3C" stroke-width="1">
+        <circle cx="540" cy="250" r="90"/><circle cx="540" cy="250" r="170"/><circle cx="540" cy="250" r="250"/>
+        <ellipse cx="540" cy="250" rx="250" ry="90"/><ellipse cx="540" cy="250" rx="250" ry="170"/>
+        <path d="M290 250h500M540 0v500"/>
+      </g>
+      <g fill="#C89B3C">
+        <circle cx="150" cy="90" r="2.5"/><circle cx="880" cy="120" r="2.5"/><circle cx="200" cy="400" r="2.5"/>
+        <circle cx="920" cy="380" r="2.5"/><circle cx="60" cy="250" r="2.5"/><circle cx="1000" cy="250" r="2.5"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap hero-inner">
+    <div class="hero-text">
+      <p class="kicker">Bourses d'études vérifiées</p>
+      <h1>Découvrez votre avenir :<br><em>des bourses pour étudiants africains</em></h1>
+      <p class="lead">Des programmes reconnus, suivis en continu — dates, conditions et démarches à jour, sans passer des heures à comparer dix sites différents.</p>
+      <form class="hero-search" id="hero-search-form">
+        <input id="hero-search-input" placeholder="Rechercher un pays, un niveau, un domaine…">
+        <button type="submit">Rechercher</button>
+      </form>
+      <div class="hero-stats">
+        <div class="stat"><b id="stat-total">–</b><span>bourses au dossier</span></div>
+        <div class="stat"><b id="stat-open">–</b><span>candidatures ouvertes</span></div>
+        <div class="stat"><b id="stat-next">–</b><span id="stat-next-label">prochaine échéance</span></div>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="hero-visual-core">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></svg>
+      </div>
+      <div class="float-chip chip-1"><b id="chip-total">–</b>bourses vérifiées</div>
+      <div class="float-chip chip-2"><b id="chip-next">–</b>prochaine échéance</div>
+    </div>
+  </div>
+</section>
+
+<section class="featured wrap reveal" id="offres">
+  <h2>Offres de bourses en vedette</h2>
+  <p class="section-sub">Les échéances les plus proches en ce moment</p>
+  <div class="featured-grid" id="featured-grid"></div>
+</section>
+
+<section class="destinations wrap reveal" id="destinations">
+  <h2>Destinations étudiantes</h2>
+  <p class="section-sub">Où mènent les bourses actuellement actives</p>
+  <div class="dest-grid" id="dest-grid"></div>
+</section>
+
+<p id="mode-banner" class="wrap">Mode démo — le serveur n'est pas connecté, ces exemples sont statiques.</p>
+
+<nav class="filters" id="apropos">
+  <div class="wrap filters-row">
+    <input id="search" type="text" placeholder="Chercher un pays, un niveau, un domaine…">
+    <select id="filter-niveau" class="chip">
+      <option value="">Tous les niveaux</option>
+      <option value="Licence">Licence</option>
+      <option value="Master">Master</option>
+      <option value="Doctorat">Doctorat</option>
+    </select>
+    <select id="filter-statut" class="chip">
+      <option value="">Tous les statuts</option>
+      <option value="urgent">Clôture imminente</option>
+      <option value="ouvert">Candidatures ouvertes</option>
+      <option value="bientot">Ouverture bientôt</option>
+      <option value="cloture">Cycle clôturé</option>
+    </select>
+  </div>
+</nav>
+
+<div class="wrap all-heading" style="padding-top:24px;">
+  <div class="sub-panel" id="sub-panel" style="display:none;"></div>
+  <h2>Toutes les bourses vérifiées</h2>
+  <p class="section-sub">Recherche et filtres pour explorer le dossier complet</p>
+</div>
+<main class="dossiers wrap" id="dossiers"></main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a class="brand" href="#top">
+        <span class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg>
+        </span>
+        <span class="brand-word">Bourses<strong>Afrique</strong></span>
+      </a>
+      <p>Bourses vérifiées manuellement, puis suivies automatiquement depuis les sites officiels de chaque programme.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul><li><a href="#offres">Bourses en vedette</a></li><li><a href="#destinations">Destinations</a></li><li><a href="#dossiers">Toutes les bourses</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h4>Alertes</h4>
+      <ul><li><a href="#dossiers">Canal Telegram — bientôt disponible</a></li></ul>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    Les dates et conditions changent d'une année sur l'autre — vérifie toujours l'échéance exacte sur le site officiel avant de déposer un dossier.
+  </div>
+</footer>
+
+<script src="https://cdn.kkiapay.me/k.js"></script>
+<script>
+let SCHOLARSHIPS = [];
+let CONFIG = { kkiapay_public_key:'', kkiapay_sandbox:true, unlock_amount:500, subscription_amount:2500 };
+let ME = null;                 // compte connecté (depuis /api/me)
+let SUBSCRIBED = false;        // abonnement actif (30 jours)
+let UNLOCKED_IDS = new Set();  // bourses débloquées une à une
+let PENDING_REOPEN_ID = null;
+let PENDING_FLOW = null;       // 'subscribe' ou 'unlock', en attente du retour KKiaPay
+
+function itemUnlocked(item){
+  return SUBSCRIBED || UNLOCKED_IDS.has(item.id);
+}
+
+const FALLBACK_DEMO = [
+  {id:'chevening-uk',name:'Chevening Scholarships',provider:'Chevening — gouvernement britannique',country:'Royaume-Uni',level:'Master',funding:'Complète',region:'Pays éligibles Chevening (la plupart des pays africains)',deadline_date:'2026-10-06',deadline_text:'6 octobre 2026, 11h00 UTC',status:'urgent',summary:"Bourse phare du gouvernement britannique pour un master d'un an dans n'importe quelle université du Royaume-Uni.",benefits:['Frais de scolarité intégralement couverts','Indemnité mensuelle de subsistance','Billets d\u2019avion aller-retour'],eligibility:['Être ressortissant d\u2019un pays éligible à Chevening','Avoir au moins deux ans d\u2019expérience professionnelle'],steps:['Créer un compte sur le portail Chevening','Rédiger les essais de candidature','Soumettre le dossier avant la clôture'],url:'https://www.chevening.org'},
+  {id:'commonwealth-master-uk',name:"Commonwealth Master's Scholarships",provider:'Commonwealth Scholarship Commission (Royaume-Uni)',country:'Royaume-Uni',level:'Master',funding:'Complète',region:'Pays du Commonwealth à revenu faible ou intermédiaire',deadline_date:null,deadline_text:'Ouverture prévue dès septembre 2026 — clôture généralement en octobre ou décembre selon le pays',status:'bientot',summary:"Bourses financées par le gouvernement britannique pour des études de master, réservées aux candidats qui n'auraient pas les moyens d'étudier au Royaume-Uni autrement.",benefits:['Scolarité complète dans une université britannique','Indemnité mensuelle de subsistance','Billets d\u2019avion aller-retour'],eligibility:['Être citoyen d\u2019un pays du Commonwealth à revenu faible ou intermédiaire','Être nominé par l\u2019organisme national désigné dans son pays'],steps:['Vérifier l\u2019organisme national désigné pour son pays','Constituer le dossier académique','Candidater via le portail en ligne'],url:'https://cscuk.fcdo.gov.uk'},
+  {id:'erasmus-mundus',name:'Erasmus Mundus Joint Master Degrees',provider:'Commission européenne — consortiums universitaires',country:'Union européenne (plusieurs pays)',level:'Master',funding:'Complète',region:'Ouvert aux étudiants de tous les pays hors Union européenne',deadline_date:'2027-01-31',deadline_text:'Autour du 31 janvier 2027 (date précise variable selon le programme choisi)',status:'ouvert',summary:"Masters conjoints enseignés dans au moins deux pays européens par un consortium d'universités, avec une bourse couvrant la totalité du parcours.",benefits:['Frais de scolarité pris en charge','Indemnité mensuelle de 1000 à 1400 €','Assurance santé pour toute la durée du master'],eligibility:['Être titulaire d\u2019un premier diplôme universitaire (licence)','Ne pas avoir résidé plus de 12 mois dans un pays du programme récemment'],steps:['Parcourir le catalogue des masters Erasmus Mundus','Sélectionner deux à trois programmes correspondant à son profil','Candidater sur le site de chaque consortium'],url:'https://www.eacea.ec.europa.eu/scholarships/erasmus-mundus-catalogue_en'},
+  {id:'daad-in-country',name:'DAAD In-Country / In-Region Scholarships',provider:'DAAD — Office allemand d\u2019échanges universitaires',country:'Afrique subsaharienne (études sur le continent)',level:'Master',funding:'Complète',region:'Ressortissants d\u2019Afrique subsaharienne',deadline_date:null,deadline_text:'Cycle annuel — clôture généralement fin novembre, prochaine échéance attendue en novembre 2026',status:'bientot',summary:"Bourses allemandes finançant des masters à orientation développement, suivis directement dans son pays ou dans un pays voisin d'Afrique subsaharienne.",benefits:['Bourse mensuelle de subsistance','Frais de scolarité pris en charge','Allocations pour la recherche'],eligibility:['Être ressortissant d\u2019un pays d\u2019Afrique subsaharienne','Avoir un premier diplôme universitaire'],steps:['Identifier le programme correspondant à son pays sur le portail DAAD','Préparer le dossier académique','Candidater avant la clôture annuelle'],url:'https://www.daad.de'},
+  {id:'mastercard-foundation',name:'Mastercard Foundation Scholars Program',provider:'Mastercard Foundation — universités partenaires (Cambridge, Makerere, Pretoria…)',country:'Variable selon l\u2019université partenaire',level:'Licence',funding:'Complète',region:'Étudiants africains issus de milieux économiquement défavorisés',deadline_date:null,deadline_text:'Candidatures 2027/2028 ouvertes depuis septembre 2026 — chaque université partenaire fixe sa propre date de clôture',status:'ouvert',summary:"Réseau de bourses complètes porté par des universités partenaires, avec un accompagnement en leadership en plus du financement des études.",benefits:['Frais de scolarité et hébergement couverts','Billets d\u2019avion aller-retour','Allocation pour ordinateur portable'],eligibility:['Être ressortissant d\u2019un pays africain','Venir d\u2019un milieu socio-économique modeste','Être admis dans le programme de l\u2019université partenaire choisie'],steps:['Choisir une université partenaire du programme','Candidater à l\u2019admission académique en indiquant sa demande de bourse','Fournir les justificatifs de situation économique demandés'],url:'https://mastercardfdn.org/all/scholars/'},
+  {id:'fulbright-fsp',name:'Fulbright Foreign Student Program',provider:'Département d\u2019État américain — ambassades des États-Unis',country:'États-Unis',level:'Master',funding:'Complète',region:'Ouvert à la quasi-totalité des pays africains, via l\u2019ambassade américaine locale',deadline_date:null,deadline_text:'Dates variables selon le pays, généralement entre février et mai',status:'bientot',summary:"Programme historique du gouvernement américain permettant d'étudier dans une université américaine, avec une sélection organisée par chaque ambassade des États-Unis.",benefits:['Frais de scolarité et frais universitaires couverts','Indemnité mensuelle de subsistance','Billets d\u2019avion aller-retour'],eligibility:['Être ressortissant du pays où l\u2019on candidate','Avoir un diplôme universitaire de premier cycle','Avoir un bon niveau d\u2019anglais'],steps:['Contacter l\u2019ambassade des États-Unis de son pays','Vérifier la date limite propre à son pays','Préparer relevés de notes et lettres de recommandation'],url:'https://foreign.fulbrightonline.org'},
+  {id:'chine-csc',name:'Chinese Government Scholarship',provider:'China Scholarship Council — ambassades de Chine',country:'Chine',level:'Licence',funding:'Complète ou partielle',region:'Ouvert à la plupart des pays africains via l\u2019ambassade de Chine',deadline_date:null,deadline_text:'Généralement fin septembre — la clôture est proche, à vérifier sans tarder auprès de l\u2019ambassade de Chine',status:'urgent',summary:"Large programme de bourses chinoises couvrant tous les niveaux d'études, avec une sélection organisée chaque année par les ambassades de Chine dans chaque pays.",benefits:['Frais de scolarité pris en charge','Hébergement sur le campus ou allocation logement','Allocation mensuelle de subsistance'],eligibility:['Répondre aux critères d\u2019âge et de santé fixés selon le niveau visé','Avoir le niveau académique requis'],steps:['Contacter l\u2019ambassade de Chine ou l\u2019institut Confucius de son pays','Choisir une université chinoise et un programme d\u2019études','Constituer le dossier avant la clôture nationale'],url:'https://www.campuschina.org'},
+  {id:'mext-japon',name:'MEXT — bourse du gouvernement japonais',provider:'MEXT — ministère japonais de l\u2019Éducation, ambassades du Japon',country:'Japon',level:'Licence',funding:'Complète',region:'Ouvert à la plupart des pays africains via l\u2019ambassade du Japon',deadline_date:null,deadline_text:'Cycle 2027 clôturé — prochaine campagne attendue entre avril et mai 2027',status:'cloture',summary:"Bourse historique du gouvernement japonais, avec une procédure par ambassade incluant des épreuves écrites et un entretien avant la recommandation finale à Tokyo.",benefits:['Frais de scolarité intégralement couverts','Billets d\u2019avion aller-retour vers le Japon','Allocation mensuelle de subsistance'],eligibility:['Répondre aux limites d\u2019âge fixées selon le niveau visé','Réussir les épreuves écrites organisées par l\u2019ambassade du Japon'],steps:['Suivre les annonces de l\u2019ambassade du Japon, généralement en avril','Déposer un dossier papier avant la date fixée localement','Passer les épreuves écrites puis un entretien'],url:'https://www.studyinjapan.go.jp'}
+];
+
+const STATUS_META = {
+  urgent:  {label:'Clôture imminente', cls:'st-urgent'},
+  ouvert:  {label:'Candidatures ouvertes', cls:'st-ouvert'},
+  bientot: {label:'Ouverture bientôt', cls:'st-bientot'},
+  cloture: {label:'Cycle clôturé', cls:'st-cloture'}
+};
+
+const ACCENTS = [
+  {bg:'var(--teal)', ink:'var(--teal-ink)'},
+  {bg:'var(--gold)', ink:'var(--gold-ink)'},
+  {bg:'var(--orange)', ink:'var(--orange-ink)'}
+];
+
+const ICONS = [
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22V4.5Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>'
+];
+
+const FLAG_MAP = {'Royaume-Uni':'🇬🇧','États-Unis':'🇺🇸','Chine':'🇨🇳','Japon':'🇯🇵'};
+const NAME_RENAME = {
+  "Variable selon l'université partenaire": "Plusieurs universités",
+  "Afrique subsaharienne (études sur le continent)": "Afrique (sur place)"
+};
+
+function getFlag(country){
+  if(FLAG_MAP[country]) return FLAG_MAP[country];
+  if(country.includes('européenne')) return '🇪🇺';
+  if(country.includes('Afrique')) return '🌍';
+  return '🌐';
+}
+function displayCountry(country){
+  if(NAME_RENAME[country]) return NAME_RENAME[country];
+  return country.includes('(') ? country.split('(')[0].trim() : country;
+}
+
+function daysUntil(iso){
+  if(!iso) return null;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = new Date(iso+'T00:00:00');
+  return Math.round((d-today)/86400000);
+}
+
+function sealContent(item){
+  const days = daysUntil(item.deadline_date);
+  if(item.status==='cloture') return {big:'—', small:'clôturé'};
+  if(days===null) return {big:'?', small:'à vérifier'};
+  if(days<0) return {big:'—', small:'clôturé'};
+  return {big:String(days), small: days===1 ? 'jour' : 'jours'};
+}
+
+/* ---------- Dossiers (liste complète) ---------- */
+function render(list){
+  const root = document.getElementById('dossiers');
+  root.innerHTML = '';
+  if(list.length===0){
+    root.innerHTML = '<p class="empty">Aucune bourse ne correspond à ces filtres pour le moment.</p>';
+    return;
+  }
+  list.forEach(item=>{
+    const meta = STATUS_META[item.status] || STATUS_META.bientot;
+    const seal = sealContent(item);
+    const el = document.createElement('article');
+    el.className = 'dossier';
+    el.innerHTML = `
+      <button class="dossier-head" aria-expanded="false">
+        <span class="seal ${meta.cls}"><b>${seal.big}</b><small>${seal.small}</small></span>
+        <span class="dossier-main">
+          <span class="dossier-title-row">
+            <h3>${item.name}</h3>
+            <span class="stamp"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> vérifié</span>
+          </span>
+          <p class="provider">${item.provider} · ${item.country}</p>
+          <span class="badges">
+            <span class="badge">${item.level}</span>
+            <span class="badge">${item.funding}</span>
+            <span class="badge">${meta.label}</span>
+          </span>
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="dossier-body">
+        <div class="dossier-body-inner">
+          <p class="summary">${item.summary}</p>
+          <p class="deadline-note"><strong>Échéance :</strong> ${item.deadline_text}<br><strong>Éligibilité géographique :</strong> ${item.region}</p>
+          ${itemUnlocked(item) ? `
+          <div class="cols">
+            <div class="col"><h4>Ce que couvre la bourse</h4><ul>${item.benefits.map(b=>`<li>${b}</li>`).join('')}</ul></div>
+            <div class="col"><h4>Conditions d\u2019éligibilité</h4><ul>${item.eligibility.map(b=>`<li>${b}</li>`).join('')}</ul></div>
+          </div>
+          <h4>Étapes de candidature</h4>
+          <ol class="steps">${item.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+          <a class="official-link" href="${item.url}" target="_blank" rel="noopener">Voir le site officiel ↗</a>
+          ` : `
+          <div class="locked-panel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <p>Conditions détaillées, avantages précis, étapes de candidature et lien officiel — débloque-les soit pour toutes les bourses avec l'abonnement, soit pour cette seule bourse.</p>
+            <div class="locked-actions">
+              <button class="unlock-btn btn-subscribe">S'abonner — toutes les bourses, ${ME && ME.subscription_days ? ME.subscription_days : 30} jours</button>
+              <span class="price" id="subprice-${item.id}"></span>
+              <button class="unlock-btn secondary unlock-one" data-id="${item.id}">Débloquer cette bourse seulement</button>
+              <span class="price" id="price-${item.id}"></span>
+            </div>
+          </div>
+          `}
+        </div>
+      </div>`;
+    const head = el.querySelector('.dossier-head');
+    const body = el.querySelector('.dossier-body');
+    head.addEventListener('click', ()=>{
+      const isOpen = el.classList.toggle('open');
+      head.setAttribute('aria-expanded', String(isOpen));
+      body.style.maxHeight = isOpen ? body.scrollHeight+'px' : '0px';
+    });
+    const subBtn = el.querySelector('.btn-subscribe');
+    if(subBtn){
+      const subPriceEl = el.querySelector(`#subprice-${item.id}`);
+      if(subPriceEl) subPriceEl.textContent = CONFIG.subscription_amount ? `${CONFIG.subscription_amount} FCFA — toutes les bourses du site` : '';
+      subBtn.addEventListener('click', ()=> openSubscribeFlow(subBtn));
+    }
+    const unlockBtn = el.querySelector('.unlock-one');
+    if(unlockBtn){
+      const priceEl = el.querySelector(`#price-${item.id}`);
+      if(priceEl) priceEl.textContent = CONFIG.unlock_amount ? `${CONFIG.unlock_amount} FCFA, une seule fois` : '';
+      unlockBtn.addEventListener('click', ()=> openUnlockFlow(unlockBtn));
+    }
+    root.appendChild(el);
+    if(item.id === PENDING_REOPEN_ID){
+      el.classList.add('open');
+      head.setAttribute('aria-expanded','true');
+      requestAnimationFrame(()=>{ body.style.maxHeight = body.scrollHeight+'px'; });
+    }
+  });
+  PENDING_REOPEN_ID = null;
+}
+
+function currentFiltered(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const niveau = document.getElementById('filter-niveau').value;
+  const statut = document.getElementById('filter-statut').value;
+  return SCHOLARSHIPS.filter(item=>{
+    if(niveau && item.level.indexOf(niveau) === -1) return false;
+    if(statut && item.status !== statut) return false;
+    if(q){
+      const haystack = (item.name+' '+item.provider+' '+item.country+' '+item.region+' '+item.level).toLowerCase();
+      if(haystack.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+}
+function applyFilters(){ render(currentFiltered()); }
+
+/* ---------- Offres en vedette ---------- */
+function renderFeatured(){
+  const withDate = SCHOLARSHIPS.filter(s=>s.deadline_date && daysUntil(s.deadline_date)>=0)
+    .sort((a,b)=>daysUntil(a.deadline_date)-daysUntil(b.deadline_date));
+  const withoutDate = SCHOLARSHIPS.filter(s=>!s.deadline_date || daysUntil(s.deadline_date)<0);
+  const top3 = withDate.concat(withoutDate).slice(0,3);
+
+  const root = document.getElementById('featured-grid');
+  root.innerHTML = '';
+  top3.forEach((item, i)=>{
+    const accent = ACCENTS[i % ACCENTS.length];
+    const icon = ICONS[i % ICONS.length];
+    const card = document.createElement('div');
+    card.className = 'f-card';
+    card.innerHTML = `
+      <div class="f-badge" style="background:${accent.bg}">${icon}</div>
+      <h3>${item.name}</h3>
+      <p class="f-meta">${item.level} · ${item.funding} · ${item.country}</p>
+      <p class="f-deadline">Date limite : <b>${item.deadline_text}</b></p>
+      <a class="f-cta" style="background:${accent.bg}" href="#${item.id}" data-id="${item.id}">Voir l'offre</a>
+    `;
+    card.querySelector('.f-cta').addEventListener('click', (e)=>{
+      e.preventDefault();
+      document.getElementById('dossiers').scrollIntoView({behavior:'smooth', block:'start'});
+      setTimeout(()=>{
+        const head = document.querySelector(`.dossier-head[data-target="${item.id}"]`) ||
+                     [...document.querySelectorAll('.dossier')].find(d=>d.dataset.id===item.id)?.querySelector('.dossier-head');
+        if(head && head.getAttribute('aria-expanded')==='false') head.click();
+      }, 400);
+    });
+    root.appendChild(card);
+  });
+}
+
+/* ---------- Destinations ---------- */
+function renderDestinations(){
+  const counts = {};
+  SCHOLARSHIPS.forEach(s=>{
+    const label = displayCountry(s.country);
+    counts[label] = (counts[label]||0) + 1;
+  });
+  const entries = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const root = document.getElementById('dest-grid');
+  root.innerHTML = '';
+  entries.forEach(([name,count], i)=>{
+    const accent = ACCENTS[i % ACCENTS.length];
+    const div = document.createElement('div');
+    div.className = 'd-card';
+    div.style.background = `linear-gradient(160deg, ${accent.bg}22, var(--navy-2))`;
+    div.style.border = `1px solid ${accent.bg}55`;
+    const flagSource = SCHOLARSHIPS.find(s=>displayCountry(s.country)===name)?.country || name;
+    div.innerHTML = `<span class="d-flag">${getFlag(flagSource)}</span><div class="d-name">${name}</div><div class="d-count">${count} bourse${count>1?'s':''}</div>`;
+    root.appendChild(div);
+  });
+}
+
+function updateHeroStats(){
+  const total = SCHOLARSHIPS.length;
+  const open = SCHOLARSHIPS.filter(s=>s.status==='ouvert'||s.status==='urgent').length;
+  const upcoming = SCHOLARSHIPS
+    .filter(s=>s.deadline_date && daysUntil(s.deadline_date) >= 0)
+    .sort((a,b)=> daysUntil(a.deadline_date) - daysUntil(b.deadline_date))[0];
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-open').textContent = open;
+  document.getElementById('chip-total').textContent = total;
+
+  if(upcoming){
+    document.getElementById('stat-next').textContent = daysUntil(upcoming.deadline_date)+'j';
+    document.getElementById('stat-next-label').textContent = upcoming.name;
+    document.getElementById('chip-next').textContent = daysUntil(upcoming.deadline_date)+'j';
+  }else{
+    document.getElementById('stat-next').textContent = '–';
+    document.getElementById('chip-next').textContent = '–';
+  }
+}
+
+async function loadScholarships(){
+  try{
+    const res = await fetch('/api/scholarships', {cache:'no-store'});
+    if(!res.ok) throw new Error('API indisponible');
+    SCHOLARSHIPS = await res.json();
+    document.getElementById('mode-banner').style.display = 'none';
+  }catch(err){
+    SCHOLARSHIPS = FALLBACK_DEMO;
+    document.getElementById('mode-banner').style.display = 'block';
+  }
+  updateHeroStats();
+  renderFeatured();
+  renderDestinations();
+  applyFilters();
+}
+
+/* ---------- Compte + paiements KKiaPay (abonnement + déblocage unité) ---------- */
+let PENDING_UNLOCK_ITEM_ID = null;
+let PENDING_BTN = null;
+let PENDING_LABEL = '';
+
+async function loadConfig(){
+  try{
+    const res = await fetch('/api/config', {cache:'no-store'});
+    if(res.ok) CONFIG = await res.json();
+  }catch(e){ /* API injoignable : CONFIG garde ses valeurs par défaut, le paiement reste désactivé */ }
+}
+
+function fmtDate(iso){
+  if(!iso) return '';
+  try{ return new Date(iso).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'}); }
+  catch(e){ return String(iso).slice(0,10); }
+}
+
+async function loadAccount(){
+  try{
+    const res = await fetch('/api/me', {cache:'no-store'});
+    if(res.status === 401){ window.location.href = '/connexion'; return false; }
+    if(!res.ok) throw new Error('API indisponible');
+    ME = await res.json();
+    SUBSCRIBED = !!(ME.subscription && ME.subscription.active);
+    UNLOCKED_IDS = new Set(ME.unlocked_ids || []);
+    updateAccountUI();
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+function updateAccountUI(){
+  const chip = document.getElementById('account-chip');
+  const logout = document.getElementById('logout-btn');
+  const subFlag = document.getElementById('sub-flag');
+  const unlockedFlag = document.getElementById('unlocked-flag');
+  if(ME && ME.user && chip){
+    chip.textContent = ME.user.name;
+    chip.style.display = 'inline';
+  }
+  if(logout) logout.style.display = 'inline-block';
+  if(subFlag) subFlag.style.display = SUBSCRIBED ? 'inline-flex' : 'none';
+  if(unlockedFlag) unlockedFlag.style.display = (!SUBSCRIBED && UNLOCKED_IDS.size > 0) ? 'inline-flex' : 'none';
+  renderSubPanel();
+}
+
+function renderSubPanel(){
+  const panel = document.getElementById('sub-panel');
+  if(!panel) return;
+  panel.style.display = 'flex';
+  if(SUBSCRIBED){
+    panel.classList.add('active');
+    panel.innerHTML = `
+      <div>
+        <h3>★ Abonnement actif</h3>
+        <p>Tous les détails de toutes les bourses sont déverrouillés jusqu'au <strong>${fmtDate(ME && ME.subscription ? ME.subscription.expires_at : null)}</strong>.</p>
+      </div>`;
+  }else{
+    panel.classList.remove('active');
+    panel.innerHTML = `
+      <div>
+        <h3>Passe à l'abonnement complet</h3>
+        <p>Conditions, avantages, étapes de candidature et liens officiels de <strong>toutes</strong> les bourses, pendant ${ME && ME.subscription_days ? ME.subscription_days : 30} jours — ${CONFIG.subscription_amount || 2500} FCFA, payés par Mobile Money.</p>
+      </div>
+      <button class="btn-sub" id="panel-sub-btn">S'abonner maintenant</button>`;
+    const btn = document.getElementById('panel-sub-btn');
+    if(btn) btn.addEventListener('click', ()=> openSubscribeFlow(btn));
+  }
+}
+
+function rememberBtn(btn){ PENDING_BTN = btn; PENDING_LABEL = btn.textContent; }
+function resetPendingBtn(){
+  if(PENDING_BTN){
+    PENDING_BTN.disabled = false;
+    PENDING_BTN.textContent = PENDING_LABEL;
+  }
+}
+
+async function handleKkiapaySuccess(response){
+  const transactionId = response && (response.transactionId || response.transaction_id);
+  if(PENDING_BTN) PENDING_BTN.textContent = 'Vérification du paiement…';
+
+  if(PENDING_FLOW === 'subscribe'){
+    try{
+      const res = await fetch('/api/subscribe/verify', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({transactionId})
+      });
+      const data = await res.json();
+      if(data.ok){
+        SUBSCRIBED = true;
+        if(ME && ME.subscription){ ME.subscription.active = true; ME.subscription.expires_at = data.expires_at; }
+        updateAccountUI();
+        applyFilters();
+        renderFeatured();
+        alert('Merci ! Ton abonnement est actif jusqu\u2019au ' + fmtDate(data.expires_at) + '.');
+      }else{
+        resetPendingBtn();
+        alert("Paiement non confirmé (" + (data.status || data.error || 'inconnu') + "). Si l'argent a été débité, réessaie dans une minute.");
+      }
+    }catch(e){
+      resetPendingBtn();
+      alert("Impossible de vérifier le paiement pour le moment. Réessaie.");
+    }
+  }else if(PENDING_FLOW === 'unlock'){
+    try{
+      const res = await fetch('/api/unlock/verify', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({transactionId, scholarshipId: PENDING_UNLOCK_ITEM_ID})
+      });
+      const data = await res.json();
+      if(data.ok){
+        UNLOCKED_IDS = new Set(data.unlocked_ids || []);
+        PENDING_REOPEN_ID = PENDING_UNLOCK_ITEM_ID;
+        updateAccountUI();
+        applyFilters();
+        renderFeatured();
+      }else{
+        resetPendingBtn();
+        alert("Paiement non confirmé (" + (data.status || data.error || 'inconnu') + "). Si l'argent a été débité, réessaie dans une minute.");
+      }
+    }catch(e){
+      resetPendingBtn();
+      alert("Impossible de vérifier le paiement pour le moment. Réessaie.");
+    }
+  }
+  PENDING_FLOW = null;
+}
+
+function handleKkiapayFailed(){
+  resetPendingBtn();
+  PENDING_FLOW = null;
+}
+
+function openSubscribeFlow(btn){
+  if(!CONFIG.kkiapay_public_key){
+    alert("Le paiement n'est pas encore configuré sur ce site.");
+    return;
+  }
+  PENDING_FLOW = 'subscribe';
+  rememberBtn(btn);
+  btn.disabled = true;
+  btn.textContent = 'Ouverture du paiement…';
+  window.openKkiapayWidget({
+    amount: CONFIG.subscription_amount,
+    key: CONFIG.kkiapay_public_key,
+    sandbox: CONFIG.kkiapay_sandbox,
+    theme: '#C89B3C'
+  });
+}
+
+function openUnlockFlow(btn){
+  if(!CONFIG.kkiapay_public_key){
+    alert("Le paiement n'est pas encore configuré sur ce site.");
+    return;
+  }
+  PENDING_FLOW = 'unlock';
+  PENDING_UNLOCK_ITEM_ID = btn.dataset.id;
+  rememberBtn(btn);
+  btn.disabled = true;
+  btn.textContent = 'Ouverture du paiement…';
+  window.openKkiapayWidget({
+    amount: CONFIG.unlock_amount,
+    key: CONFIG.kkiapay_public_key,
+    sandbox: CONFIG.kkiapay_sandbox,
+    theme: '#C89B3C'
+  });
+}
+
+/* ---------- Interactions ---------- */
+document.getElementById('search').addEventListener('input', applyFilters);
+document.getElementById('filter-niveau').addEventListener('change', applyFilters);
+document.getElementById('filter-statut').addEventListener('change', applyFilters);
+
+document.getElementById('hero-search-form').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const val = document.getElementById('hero-search-input').value;
+  document.getElementById('search').value = val;
+  applyFilters();
+  document.getElementById('dossiers').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+window.addEventListener('scroll', ()=>{
+  document.getElementById('site-nav').classList.toggle('scrolled', window.scrollY > 8);
+});
+
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+}, {threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+(async function init(){
+  await loadConfig();
+  const logged = await loadAccount();
+  if(window.addSuccessListener) addSuccessListener(handleKkiapaySuccess);
+  if(window.addFailedListener) addFailedListener(handleKkiapayFailed);
+  if(logged){
+    loadScholarships();
+    setInterval(loadScholarships, 5 * 60 * 1000);
+  }
+})();
+</script>
+</body>
+</html>

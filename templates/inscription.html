@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Inscription — Bourses Afrique{% endblock %}
+{% block heading %}Créer mon compte{% endblock %}
+{% block subtitle %}Inscris-toi pour accéder aux bourses vérifiées — résumé et échéances gratuits, détails complets avec l'abonnement.{% endblock %}
+{% block fields %}
+<div class="field">
+  <label for="name">Nom complet</label>
+  <input id="name" name="name" type="text" required maxlength="120" value="{{ request.form.get('name', '') }}">
+</div>
+<div class="field">
+  <label for="email">Adresse email</label>
+  <input id="email" name="email" type="email" required value="{{ request.form.get('email', '') }}">
+</div>
+<div class="field">
+  <label for="password">Mot de passe (6 caractères minimum)</label>
+  <input id="password" name="password" type="password" required minlength="6" autocomplete="new-password">
+</div>
+{% endblock %}
+{% block button %}Créer mon compte et voir les bourses{% endblock %}
+{% block switch %}Tu as déjà un compte ? <a href="/connexion">Se connecter</a>{% endblock %}
